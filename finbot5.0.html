@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>FinBot 5.0</title>
+<link rel="shortcut icon" href="FINRECORD FINAL LOGO.png" type="image/x-icon" />
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" crossorigin="anonymous"/>
+<script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script> <!-- Markdown parser -->
+
+<style>
+body {
+font-family: 'Poppins', sans-serif;
+background-color: #f4f4f4;
+margin: 0;
+padding: 0;
+display: flex;
+flex-direction: column;
+min-height: 100vh;
+}
+
+.chat-container {
+max-width: 800px;
+margin: 20px auto;
+background-color: #fff;
+border-radius: 8px;
+box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+overflow: hidden;
+display: flex;
+flex-direction: column;
+flex-grow: 1;
+}
+
+.chat-header {
+background-color: #555;
+color: white;
+padding: 15px;
+text-align: center;
+font-size: 24px;
+border-bottom: 1px solid #ddd;
+}
+
+.chat-log {
+flex-grow: 1;
+padding: 20px;
+overflow-y: auto;
+max-height: 60vh;
+}
+
+.message {
+margin-bottom: 15px;
+padding: 10px 15px;
+border-radius: 20px;
+max-width: 70%;
+word-wrap: break-word;
+}
+
+.message.user {
+background-color: #007bff;
+color: white;
+margin-left: auto;
+border-bottom-right-radius: 2px;
+}
+
+.message.bot {
+background-color: #e2e6ea;
+color: #333;
+margin-right: auto;
+border-bottom-left-radius: 2px;
+}
+
+.chat-input {
+display: flex;
+padding: 15px;
+border-top: 1px solid #ddd;
+}
+
+.chat-input input {
+flex-grow: 1;
+padding: 10px 15px;
+border: 1px solid #ddd;
+border-radius: 20px;
+margin-right: 10px;
+font-size: 16px;
+}
+
+.chat-input button {
+background-color: #28a745;
+color: white;
+border: none;
+padding: 10px 20px;
+border-radius: 20px;
+cursor: pointer;
+font-size: 16px;
+}
+
+.chat-input button:hover {
+background-color: #218838;
+}
+
+.navbar {
+width: 100%;
+background-color: #555;
+overflow: auto;
+display: flex;
+}
+
+.navbar .logo img {
+height: 80px;
+width: 100px;
+object-fit: contain;
+mix-blend-mode: color-burn;
+}
+
+.nav-sec {
+display: flex;
+position: absolute;
+left: 45%;
+}
+
+.nav-sec li {
+margin: 0 20px;
+}
+
+.nav-sec li a {
+margin-top: 25px;
+float: left;
+padding: 12px;
+color: white;
+text-decoration: none;
+font-size: 16px;
+width: auto;
+text-align: center;
+}
+
+.nav-sec li a.active {
+background-color: #04AA6D;
+}
+
+.navbar a:hover {
+background-color: #000;
+}
+
+ul.no-bullets {
+list-style-type: none;
+margin: 0;
+padding: 0;
+}
+
+footer {
+text-align: center;
+padding: 10px;
+background-color: #333;
+color: #fff;
+width: 100%;
+margin-top: auto;
+}
+
+@media screen and (max-width: 768px) {
+.nav-sec {
+position: static;
+flex-direction: column;
+width: 100%;
+align-items: center;
+}
+
+.nav-sec li {
+margin: 5px 0;
+}
+
+.navbar .logo {
+width: 100%;
+text-align: center;
+}
+}
+</style>
+</head>
+
+<body>
+<div class="navbar">
+<div class="logo">
+<img src="FINRECORD FINAL LOGO.png" alt="logo">
+</div>
+<ul class="nav-sec no-bullets">
+<li><a href="Cash Manager.html">Cash Manager</a></li>
+<li><a href="Loan Calculator.html">Loan Calculator</a></li>
+<li><a class="active" href="Finbot4.0.html">FinBot 5.0</a></li>
+<li><a href="New Enrollment.html">New Enrollment</a></li>
+<li><a href="index.html">Log Out</a></li>
+</ul>
+</div>
+
+<div class="chat-container">
+<div class="chat-header">FinBot 5.0</div>
+<div class="chat-log" id="chat-log">
+<div class="message bot"><strong>FinBot:</strong><br>Hello! I am FinBot, your assistant for banking and loan information. Ask me about interest rates, EMI, documents, or types of loans.</div>
+</div>
+<div class="chat-input">
+<input type="text" id="user-input" placeholder="Type your message..." onkeypress="if(event.keyCode==13) sendMessage()">
+<button onclick="sendMessage()">Send</button>
+</div>
+</div>
+
+<footer>
+<p>&copy; 2025 FinRecord. All rights reserved.</p>
+</footer>
+
+<script>
+const GEMINI_API_KEY = "AIzaSyAY9pi4tOmrx_5toEqwlvWo5JIFI8VOd2o"; // 🟡 Replace this
+
+const chatLog = document.getElementById("chat-log");
+
+async function sendMessage() {
+const input = document.getElementById("user-input");
+const userMessage = input.value.trim();
+if (!userMessage) return;
+
+const userDiv = appendMessage("You", userMessage, "user");
+input.value = "";
+input.disabled = true;
+document.querySelector(".chat-input button").disabled = true;
+
+const typingDiv = appendMessage("FinBot", "Typing...", "bot");
+
+const prompt = `
+You are FinBot, a helpful assistant for CSP owners in India.
+Respond with:
+- Clear markdown formatting (### for sections, * for bullets)
+- No paragraphs unless necessary
+- Direct, friendly tone
+- Current info on loans, EMIs, documents
+
+Customer asks: ${userMessage}
+`;
+
+try {
+const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${GEMINI_API_KEY}`, {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({
+contents: [{ parts: [{ text: prompt }] }]
+})
+});
+
+const data = await res.json();
+if (typingDiv && chatLog.contains(typingDiv)) chatLog.removeChild(typingDiv);
+
+if (data.error) {
+appendMessage("FinBot", "API Error: " + data.error.message, "bot");
+return;
+}
+
+const reply = data?.candidates?.[0]?.content?.parts?.[0]?.text || "Sorry, I didn't get that.";
+appendMessage("FinBot", reply, "bot");
+
+} catch (err) {
+console.error(err);
+if (typingDiv && chatLog.contains(typingDiv)) chatLog.removeChild(typingDiv);
+appendMessage("FinBot", "Error connecting to Gemini. Try again later.", "bot");
+} finally {
+input.disabled = false;
+document.querySelector(".chat-input button").disabled = false;
+input.focus();
+}
+}
+
+function appendMessage(sender, message, type) {
+const div = document.createElement("div");
+div.className = `message ${type}`;
+div.innerHTML = `<strong>${sender}:</strong><br>${marked.parse(message)}`;
+chatLog.appendChild(div);
+chatLog.scrollTop = chatLog.scrollHeight;
+return div;
+}
+</script>
+</body>
+</html>

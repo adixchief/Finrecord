@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>New Enrollment</title>
+
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="style2.css">
+
+  <!-- Footer Style -->
+  <style>
+    footer {
+      text-align: center;
+      position: fixed;
+      padding: 10px 10px 0px 10px;
+      bottom: 0;
+      width: 100%;
+      background-color: #333;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation Bar -->
+  <div class="navbar">
+    <div class="logo">
+      <img src="img/FINRECORD FINAL LOGO.png" alt="logo">
+    </div>
+    <ul class="nav-sec no-bullets">
+      <li><a href="Cash Manager.html">Cash Manager</a></li>
+      <li><a href="Loan Calculator.html">Loan Calculator</a></li>
+      <li><a href="Finbot5.0.html">FinBot5.0</a></li>
+      <li><a class="active" href="New Enrollment.html">New Enrollment</a></li>
+      <li><a href="index.html">Log Out</a></li>
+    </ul>
+  </div>
+
+  <!-- Alert -->
+  <div class="alert">
+    <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
+    The Database is Not Stored on this Website. Please save your data before refreshing the page.
+  </div>
+
+  <!-- Main Content -->
+  <div class="container-fluid">
+    <div class="parentBox">
+      <div class="container">
+        <div class="form-group p-5">
+          <table>
+            <tr>
+              <td>Name</td>
+              <td><input class="borderColor" onblur="Validation(this.id);" type="text" id="name"></td>
+            </tr>
+            <tr>
+              <td class="pt-3">Email</td>
+              <td class="pt-3"><input class="borderColor" onblur="Validation(this.id);" type="email" id="email"></td>
+            </tr>
+            <tr>
+              <td class="pt-3">Mobile</td>
+              <td class="pt-3"><input class="borderColor" onblur="Validation(this.id);" type="text" id="website"></td>
+            </tr>
+            <tr>
+              <td class="pt-3">Image Link</td>
+              <td class="pt-3"><input class="borderColor" onblur="Validation(this.id);" type="text" id="imageLink"></td>
+            </tr>
+            <tr>
+              <td class="pt-3">Gender</td>
+              <td class="pt-3"><input type="radio" name="gender" id="male" value="Male"> Male</td>
+            </tr>
+            <tr>
+              <td></td>
+              <td><input type="radio" name="gender" id="female" value="Female"> Female</td>
+            </tr>
+            <tr>
+              <td class="pt-3">Card Required</td>
+              <td class="pt-3 ss">
+                <input type="checkbox" name="pl" value="VISA"> VISA
+                <input class="ml-3" type="checkbox" name="pl" value="MasterCard"> MasterCard
+                <input class="ml-3" type="checkbox" name="pl" value="Rupay"> Rupay
+              </td>
+            </tr>
+            <tr>
+              <td class="pt-3 pe-2"><br><br>
+                <button onclick="addData()" type="button" class="btn btn-primary">Submit</button>
+              </td>
+              <td class="pt-3 ps-4"><br><br>
+                <button onclick="clearData()" type="button" class="btn btn-danger ml-3">Clear</button>
+              </td>
+              <td class="pt-3 ps-4"><br><br>
+                <button onclick="printdiv('printable_div_id');" class="btn btn-primary">Print List</button>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div class="centerLine"></div>
+
+      <!-- Display Table -->
+      <div class="container tableSize d-flex flex-column p-5">
+        <div class="mx-auto"><h5><strong>Enrolled Customers</strong></h5></div>
+        <div id="printable_div_id">
+          <table class="mx-auto table mt-3 w-75 table-bordered table-striped">
+            <thead class="bg-warning">
+              <tr>
+                <th>Description</th>
+                <th>Image</th>
+              </tr>
+            </thead>
+            <tbody id="main-content">
+              <!-- JS Data -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer (same as Cash Manager) -->
+  <footer>
+    <small>
+      Copyright © 2025 Finrecord. All Rights Reserved.
+    </small>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="all js/script2.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+</body>
+</html>
